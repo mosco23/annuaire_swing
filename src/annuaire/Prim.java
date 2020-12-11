@@ -5,10 +5,17 @@
  */
 package annuaire;
 
-import annuaire.frames.Annuaire;
-import annuaire.frames.CardAdmin;
-import annuaire.personnes.Admin;
+import annuaire.DB.Database;
+import annuaire.Utils.Recuperer;
+import annuaire.menus.TypeOne;
+import annuaire.panels.Annuaire;
+import annuaire.personnes.User;
 import java.awt.CardLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,6 +24,8 @@ import java.awt.CardLayout;
 public class Prim extends javax.swing.JDialog {
 
     CardLayout cardLayout = new CardLayout();
+    Database database = new Database();
+    TreeSet<User> users = new TreeSet<>();
     /**
      * Creates new form Prim
      * @param parent
@@ -25,8 +34,18 @@ public class Prim extends javax.swing.JDialog {
     public Prim(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        jMenuBar.add(new TypeOne());
         jPanel.setLayout(cardLayout);
-        jPanel.add(new Annuaire());
+        ResultSet resultSet = database.getAll("Admin");
+        try {
+            while(resultSet.next())
+                users.add(Recuperer.admin(resultSet));
+               
+        } catch (SQLException ex) {
+            Logger.getLogger(Prim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+         jPanel.add(new Annuaire(users));
     }
 
     /**
@@ -39,11 +58,7 @@ public class Prim extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -60,22 +75,8 @@ public class Prim extends javax.swing.JDialog {
             .addGap(0, 630, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Menu");
-
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Mon Profil");
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Se déconnecter");
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        jMenuBar.setBackground(java.awt.Color.black);
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,11 +135,7 @@ public class Prim extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JPanel jPanel;
     // End of variables declaration//GEN-END:variables
 }

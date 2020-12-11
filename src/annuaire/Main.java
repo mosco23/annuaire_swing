@@ -6,7 +6,7 @@
 package annuaire;
 
 import annuaire.DB.Database;
-import annuaire.frames.CardStudent;
+import annuaire.panels.CardStudent;
 import annuaire.personnes.Student;
 import java.awt.GridLayout;
 import java.sql.ResultSet;
@@ -69,8 +69,7 @@ public class Main extends javax.swing.JDialog {
                 String lieu2naissance = resultSet.getString("lieu2naiss");
                 String email = resultSet.getString("email");
                 String mobile = resultSet.getString("mobile");
-                String niveau = resultSet.getString("niveau");
-                Student student = new Student(nce, nom, prenoms, date2naissance, lieu2naissance, email, mobile, niveau);
+                Student student = new Student(nce, nom, prenoms, date2naissance, lieu2naissance, email, mobile);
                 students.add(student);
                 
             }

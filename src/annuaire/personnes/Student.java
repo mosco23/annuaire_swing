@@ -5,9 +5,6 @@
  */
 package annuaire.personnes;
 
-import annuaire.DB.Database;
-import java.util.HashMap;
-
 /**
  *
  * @author mosco
@@ -15,42 +12,24 @@ import java.util.HashMap;
 public class Student extends User{
     
     private String nce;
-    private Database database;
     private String date2naissance;
     private String lieu2naissance;
-    private String niveau;
     
     
     
-    public Student(String nce, String nom, String prenoms, String date2naissance, String lieu2naissance, String email, String mobile, String niveau){
+    public Student(String nce, String nom, String prenoms, String date2naissance, String lieu2naissance, String email, String mobile){
         super(nom, prenoms, email, mobile);
         this.nce = nce;
         this.date2naissance = date2naissance;
         this.lieu2naissance = lieu2naissance;
-        this.niveau = niveau;
     }
     
     
     @Override
     public String toString(){
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", this.getNce(), this.getNom(), this.getPrenoms(), this.getDate2naissance(), this.getLieu2naissance(), this.getEmail(), this.getMobile(), this.getNiveau());
+        return String.format("%s,%s,%s,%s,%s,%s,%s", this.getNce(), this.getNom(), this.getPrenoms(), this.getDate2naissance(), this.getLieu2naissance(), this.getEmail(), this.getMobile());
     } 
     
-
-   
-    public void add(){
-        
-        getDatabase().add(this.getClass().getName(), new HashMap<String, String>().put("nce", this.getNce()));
-    }
-    
-    
-    public String modify(){
-        return null;
-    }
-    
-    public Student getStudents(){
-        return (Student) getDatabase().getAll(this.getNce());
-    }
     
     /* public Student getStudentBy(String[] str){
         return // new Student(); //(Student) database.getBy(this.getClass().getName(), str);
@@ -70,19 +49,6 @@ public class Student extends User{
         this.nce = nce;
     }
 
-    /**
-     * @return the database
-     */
-    public Database getDatabase() {
-        return database;
-    }
-
-    /**
-     * @param database the database to set
-     */
-    public void setDatabase(Database database) {
-        this.database = database;
-    }
 
     /**
      * @return the date2naissance
@@ -110,20 +76,6 @@ public class Student extends User{
      */
     public void setLieu2naissance(String lieu2naissance) {
         this.lieu2naissance = lieu2naissance;
-    }
-
-    /**
-     * @return the niveau
-     */
-    public String getNiveau() {
-        return niveau;
-    }
-
-    /**
-     * @param niveau the niveau to set
-     */
-    public void setNiveau(String niveau) {
-        this.niveau = niveau;
     }
  
 }

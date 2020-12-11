@@ -41,9 +41,9 @@ public class Database {
         }
     }
     
-    public boolean add(String table, Object object){
+    public boolean insert(String table, Object object){
         try{
-            query = "INSERT INTO "+table+" VALUES("+object.toString()+")";
+            query = "INSERT INTO "+table+" VALUES(null,"+object.toString()+")";
             statement.executeUpdate(query);
             return true;
         }catch(SQLException e){
@@ -68,6 +68,7 @@ public class Database {
     public ResultSet getByChar(String table, String searchChar, String attr){
         try{
             query = "SELECT * FROM "+table+" WHERE "+attr+" LIKE '"+searchChar+"%'";
+            System.out.println(query);
             resultSet = statement.executeQuery(query);
             return resultSet;
         }catch(SQLException e){
@@ -79,7 +80,7 @@ public class Database {
     
     public ResultSet getByString(String table, String searchStr, String attr){
         try{
-            query = "SELECT * FROM "+table+" WHERE "+attr+" LIKE ‘%"+searchStr+"%’";
+            query = "SELECT * FROM "+table+" WHERE "+attr+"="+searchStr;
             System.out.println(query);
             resultSet = statement.executeQuery(query);
             while(resultSet.next()){
@@ -93,7 +94,7 @@ public class Database {
         }
     }
     
-    public boolean modify(String table, String attribute_one, String value_one, String attribute_two, String value_two){
+    public boolean update(String table, String attribute_one, String value_one, String attribute_two, String value_two){
         try{
             query = "UPDATE "+table+"SET "+attribute_one+"="+value_one+" WHERE "+attribute_two+"="+value_two;
             statement.executeUpdate(query);
@@ -104,7 +105,7 @@ public class Database {
         }
     }
     
-    public boolean pop(String table, String attr, String value){
+    public boolean delete(String table, String attr, String value){
         try{
             query = "DELETE FROM"+table+"WHERE"+attr+"="+value;
             statement.executeUpdate(query);

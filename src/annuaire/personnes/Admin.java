@@ -11,31 +11,24 @@ package annuaire.personnes;
  */
 public class Admin extends User {
     
-    private String pseudo;
     private String password;
+    public boolean isActive = false;
     
-    public Admin(String nom, String prenoms, String pseudo, String email, String mobile, String password) {
+    public Admin(String nom, String prenoms, String email, String mobile, String password) {
         super(nom, prenoms, email, mobile);
-        this.pseudo = pseudo;
         this.password = password;
         
     }
     
     @Override
     public String toString(){
-        return String.format("%s,%s,%s,%s,%s,%s", this.getNom(), this.getPrenoms(), this.getPseudo(), this.getEmail(), this.getMobile(), this.getPassword());
+        return String.format("%s,%s,%s,%s,%s,%d", this.getNom(), this.getPrenoms(), this.getEmail(), this.getMobile(), this.getPassword(), isActive);
     } 
     
-    public String getPseudo(){
-        return pseudo;
-    }
+    
     
     public String getPassword(){
         return password;
-    }
-    
-    public void setPseudo(String pseudo){
-        this.pseudo = pseudo;
     }
     
     public void setPassword(String password){

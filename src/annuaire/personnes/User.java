@@ -84,7 +84,8 @@ public abstract class User implements Comparable{
     
     @Override
     public int compareTo(Object o){
-        return this.getNom().compareTo(((Student) o).getNom());
+        return this.getNom().compareTo(((User) o).getNom()) - 
+                this.getPrenoms().compareTo(((User) o).getPrenoms());
     }
     
 }

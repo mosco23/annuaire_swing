@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/DB/Database.java</file>
+            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/panels/Annuaire.java</file>
+            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/panels/CompletCardAdmin.java</file>
             <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/Prim.java</file>
+            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/panels/PanelAdmin.java</file>
             <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/personnes/Admin.java</file>
-            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/frames/FrameConn.java</file>
-            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/frames/Annuaire.java</file>
-            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/frames/FrameAdmin.java</file>
-            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/frames/CardAdmin.java</file>
             <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/personnes/User.java</file>
+            <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/Utils/Recuperer.java</file>
             <file>file:/home/mosco/NetBeansProjects/annuaire/src/annuaire/personnes/Student.java</file>
         </group>
     </open-files>
