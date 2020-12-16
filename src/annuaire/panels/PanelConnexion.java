@@ -5,15 +5,18 @@
  */
 package annuaire.panels;
 
-import annuaire.DB.Database;
+import annuaire.Main;
+import annuaire.Utils.MonControleur;
 import annuaire.Utils.Recuperer;
+import annuaire.msg.ErrorMsg;
+import annuaire.msg.SuccesMsg;
 import annuaire.personnes.Admin;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -26,6 +29,10 @@ public class PanelConnexion extends javax.swing.JPanel {
      */
     public PanelConnexion() {
         initComponents();
+        setVisible(true);
+        setFocusable(true);
+        email.setFocusable(true);
+        jPasswordField.setFocusable(true);
     }
 
     /**
@@ -38,34 +45,44 @@ public class PanelConnexion extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        pseudoOREmail = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jPasswordField = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        connecter = new javax.swing.JButton();
 
+        setBackground(java.awt.SystemColor.controlDkShadow);
+
+        jLabel1.setBackground(java.awt.SystemColor.controlDkShadow);
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 30)); // NOI18N
-        jLabel1.setForeground(java.awt.Color.darkGray);
+        jLabel1.setForeground(java.awt.Color.white);
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Connectez-vous");
 
-        pseudoOREmail.setMinimumSize(new java.awt.Dimension(10, 50));
-        pseudoOREmail.setPreferredSize(new java.awt.Dimension(220, 25));
+        email.setMinimumSize(new java.awt.Dimension(10, 50));
+        email.setName("email"); // NOI18N
+        email.setPreferredSize(new java.awt.Dimension(220, 25));
 
-        jLabel3.setText("Pseudo/email");
+        jLabel3.setForeground(java.awt.Color.white);
+        jLabel3.setText("Email");
 
+        jLabel5.setForeground(java.awt.Color.white);
         jLabel5.setText("Password");
 
-        jPasswordField.setText("jPasswordField1");
         jPasswordField.setPreferredSize(new java.awt.Dimension(220, 25));
 
-        jButton1.setBackground(java.awt.SystemColor.activeCaption);
-        jButton1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jButton1.setForeground(java.awt.Color.white);
-        jButton1.setText("Se connecter");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        connecter.setBackground(java.awt.SystemColor.activeCaption);
+        connecter.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        connecter.setForeground(java.awt.Color.white);
+        connecter.setText("Se connecter");
+        connecter.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                connecterMouseClicked(evt);
+            }
+        });
+        connecter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connecterActionPerformed(evt);
             }
         });
 
@@ -74,100 +91,96 @@ public class PanelConnexion extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(28, 28, 28)
-                    .addComponent(jLabel3)
-                    .addGap(18, 18, 18)
-                    .addComponent(pseudoOREmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(40, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(connecter, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPasswordField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(email, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(120, 120, 120)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(pseudoOREmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(94, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(connecter))
         );
+
+        email.getAccessibleContext().setAccessibleName("email");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void connecterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_connecterMouseClicked
         ResultSet resultSet;
-        String poe = pseudoOREmail.getText();
-        String pwd = Arrays.toString(jPasswordField.getPassword());
-        if(pwd.isEmpty() && pwd.length() >= 6 ){
-            
-            if(!poe.isEmpty() ){
-                Database database = new Database();
-                
-                //Vérification du champ pseudoOREmail
-                if(poe.contains("@"))
-                    resultSet = database.getByString("Admin",poe, "email");
-                else
-                    resultSet = database.getByString("Admin", poe, "pseudo");
-                
-                //Vérification du mot de passe
-                try {
-                    if(pwd.equals(resultSet.getString("password"))){
-                        Admin admin = Recuperer.admin(resultSet);
-                        admin.isActive = true;
-                        database.update("Admin", "isActive", String.valueOf(admin.isActive), "email", admin.getEmail());
-                        
+        if(jPasswordField.getPassword() != null && jPasswordField.getPassword().length >= 6 && !email.getText().isEmpty() ){
 
+            //Vérification du champ Email
+            resultSet = Main.database.getByString(Admin.class.getSimpleName(), email.getName(), email.getText());
+            if(resultSet != null){
+                try {
+                    Admin admin = (Admin) Recuperer.admins(resultSet).first();
+                    if(String.valueOf(jPasswordField.getPassword()).equals(admin.getPassword())){
+                        Main.admin = admin;
+                        Main.addToPaneG(null);
+                        Main.setIntojPanel();
+                        new SuccesMsg();
                     }
                     else{
-                        JOptionPane.showConfirmDialog(null, "Oups ce utilisateur n'existe pas !");
+                        new ErrorMsg();
                     }
-                    
                 } catch (SQLException ex) {
                     Logger.getLogger(PanelConnexion.class.getName()).log(Level.SEVERE, null, ex);
+                }catch(NoSuchElementException e){
+                    new ErrorMsg();
                 }
-                    
                 
             }
             else{
-                JOptionPane.showConfirmDialog(null, "Veillez un pseudo ou un email valide svp !");
+                new ErrorMsg();
             }
-            
+        
                 
+            
+            
+            //Vérification du mot de passe
         }
         else{
-            JOptionPane.showConfirmDialog(null, "Veillez entrez un mot de passe d'au moins 6 caractères !");
+            new ErrorMsg("Veillez remplir tous les champs correctement !\n"
+                    + "Entrez une addresse email valide !\n"
+                    + "Le mot de passe doit être d'au moins 6 caractères !");
         }
             
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_connecterMouseClicked
+
+    private void connecterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connecterActionPerformed
+        SwingUtilities.invokeLater(new MonControleur());
+    }//GEN-LAST:event_connecterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton connecter;
+    private javax.swing.JTextField email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField jPasswordField;
-    private javax.swing.JTextField pseudoOREmail;
     // End of variables declaration//GEN-END:variables
 }

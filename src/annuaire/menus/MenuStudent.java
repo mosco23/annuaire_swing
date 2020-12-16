@@ -6,25 +6,30 @@
 package annuaire.menus;
 
 import annuaire.Main;
-import annuaire.panels.PanelAdmin;
-import annuaire.panels.PanelConnexion;
+import annuaire.Utils.Recuperer;
+import annuaire.panels.Annuaire;
+import annuaire.panels.PanelStudent;
+import annuaire.personnes.Student;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 
 /**
  *
  * @author mosco
  */
-public class TypeOne extends javax.swing.JMenu {
+public class MenuStudent extends javax.swing.JMenu {
 
     JMenuItem itemOne;
     JMenuItem itemTwo;
     /**
      * Creates new form TypeOne
      */
-    public TypeOne() {
+    public MenuStudent() {
         initComponents();
         
-        setText("Menu");
+        setText("Mes étudiants");
         initJMenuItems();
         
         
@@ -33,8 +38,8 @@ public class TypeOne extends javax.swing.JMenu {
     //private void 
     
     private void initJMenuItems(){
-        itemOne = new JMenuItem("Créer un compte");
-        itemTwo = new JMenuItem("Se Connecter");
+        itemOne = new JMenuItem("Voir Liste étudiants");
+        itemTwo = new JMenuItem("Ajouter étudiant");
         add(itemOne);
         add(itemTwo);
         
@@ -43,11 +48,16 @@ public class TypeOne extends javax.swing.JMenu {
     }
     
     private void itemOneActionPerformed(java.awt.event.ActionEvent evt){
-        Main.addToPaneG(new PanelAdmin());
+        try {
+            Main.setIntojPanel(new Annuaire(Recuperer.etudiants(Main.database.getAll(Student.class.getSimpleName()))));
+            Main.addToPaneG(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuStudent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void itemTwoActionPerformed(java.awt.event.ActionEvent evt){
-        Main.addToPaneG(new PanelConnexion());
+        Main.addToPaneG(new PanelStudent());
     }
 
     /**

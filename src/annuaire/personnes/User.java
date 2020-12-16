@@ -15,10 +15,12 @@ public abstract class User implements Comparable{
     private String prenoms;
     private String email;
     private String mobile;
+    private String id;
     
     
-    public User(String nom, String prenoms, String email, String mobile){
-        this.nom = nom;
+    public User(String id, String nom, String prenoms, String email, String mobile){
+        this.id = id;
+        this.nom = nom.toUpperCase();
         this.prenoms = prenoms;
         this.email = email;
         this.mobile = mobile;
@@ -80,12 +82,24 @@ public abstract class User implements Comparable{
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-    
+
     
     @Override
     public int compareTo(Object o){
-        return this.getNom().compareTo(((User) o).getNom()) - 
-                this.getPrenoms().compareTo(((User) o).getPrenoms());
+        return this.comparator().compareTo(((User) o).comparator()  );
     }
+    
+    public String comparator(){
+        return String.format("%s%s%s%s", this.getNom(), this.getPrenoms(), this.getEmail(), this.getMobile());
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    
     
 }

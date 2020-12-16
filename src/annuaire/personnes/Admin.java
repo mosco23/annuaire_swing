@@ -12,17 +12,16 @@ package annuaire.personnes;
 public class Admin extends User {
     
     private String password;
-    public boolean isActive = false;
     
-    public Admin(String nom, String prenoms, String email, String mobile, String password) {
-        super(nom, prenoms, email, mobile);
+    public Admin(String id, String nom, String prenoms, String email, String mobile, String password) {
+        super(id, nom, prenoms, email, mobile);
         this.password = password;
         
     }
     
     @Override
     public String toString(){
-        return String.format("%s,%s,%s,%s,%s,%d", this.getNom(), this.getPrenoms(), this.getEmail(), this.getMobile(), this.getPassword(), isActive);
+        return String.format("%s,'%s','%s','%s','%s','%s'", this.getId(), this.getNom(), this.getPrenoms(), this.getEmail(), this.getMobile(), this.getPassword());
     } 
     
     

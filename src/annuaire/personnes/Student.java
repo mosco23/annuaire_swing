@@ -17,8 +17,8 @@ public class Student extends User{
     
     
     
-    public Student(String nce, String nom, String prenoms, String date2naissance, String lieu2naissance, String email, String mobile){
-        super(nom, prenoms, email, mobile);
+    public Student(String id, String nce, String nom, String prenoms, String date2naissance, String lieu2naissance, String email, String mobile){
+        super(id, nom, prenoms, email, mobile);
         this.nce = nce;
         this.date2naissance = date2naissance;
         this.lieu2naissance = lieu2naissance;
@@ -27,8 +27,9 @@ public class Student extends User{
     
     @Override
     public String toString(){
-        return String.format("%s,%s,%s,%s,%s,%s,%s", this.getNce(), this.getNom(), this.getPrenoms(), this.getDate2naissance(), this.getLieu2naissance(), this.getEmail(), this.getMobile());
-    } 
+        return String.format("%s,'%s','%s','%s','%s','%s','%s','%s',%s", this.getId(), this.getNce(), this.getNom(), this.getPrenoms(), this.getDate2naissance(), this.getLieu2naissance(), this.getEmail(), this.getMobile(), null);
+    }
+    
     
     
     /* public Student getStudentBy(String[] str){

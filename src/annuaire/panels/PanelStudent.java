@@ -5,29 +5,58 @@
  */
 package annuaire.panels;
 
-import annuaire.DB.Database;
+import annuaire.Main;
 import annuaire.Utils.Recuperer;
 import annuaire.personnes.Student;
+import annuaire.personnes.User;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import annuaire.msg.SuccesMsg;
+import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author mosco
  */
-public class PanelStudent extends javax.swing.JPanel {
-
+public class PanelStudent extends PanelUser {
+    
     /**
      * Creates new form PanelStudent
+     * @param text
      */
     public PanelStudent() {
+        super();
         initComponents();
-        setVisible(true);
     }
+    
+    public PanelStudent(String text) {
+        super();
+        initComponents();
+        if(!text.equals(""))
+            enregistrer.setText(text);
+    }
+
+    PanelStudent(Student student) {
+        super(student);
+        initComponents();
+        remplissage();
+    }
+    
+    
+    protected void remplissage(){
+        jTextFieldNce.setText(((Student)user).getNce());
+        jTextFieldNom.setText(user.getNom());
+        jTextFieldPrenoms.setText(user.getPrenoms());
+        jTextFieldDate2naiss.setText(((Student)user).getDate2naissance());
+        jTextFieldLieu2naiss.setText(((Student)user).getLieu2naissance());
+        jTextFieldEmail.setText(user.getEmail());
+        jTextFieldMobile.setText(user.getMobile());
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,13 +67,12 @@ public class PanelStudent extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldNce = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldNom = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldPrenom = new javax.swing.JTextField();
+        jTextFieldPrenoms = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldDate2naiss = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -53,30 +81,64 @@ public class PanelStudent extends javax.swing.JPanel {
         jTextFieldEmail = new javax.swing.JTextField();
         jTextFieldMobile = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        enregistrer = new javax.swing.JButton();
+        effacer = new javax.swing.JButton();
 
-        jButton1.setBackground(java.awt.SystemColor.activeCaption);
-        jButton1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jButton1.setForeground(java.awt.Color.white);
-        jButton1.setText("Enregistrer");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+        setBackground(java.awt.SystemColor.controlDkShadow);
+        setPreferredSize(new java.awt.Dimension(340, 350));
+
+        jLabel1.setForeground(java.awt.Color.white);
+        jLabel1.setText("Nom");
+
+        jTextFieldNce.setName("nce"); // NOI18N
+
+        jLabel2.setForeground(java.awt.Color.white);
+        jLabel2.setText("Prenoms");
+
+        jTextFieldNom.setName("nom"); // NOI18N
+
+        jLabel3.setForeground(java.awt.Color.white);
+        jLabel3.setText("Date2Naissance");
+
+        jTextFieldPrenoms.setName("prenoms"); // NOI18N
+
+        jLabel4.setForeground(java.awt.Color.white);
+        jLabel4.setText("Lieu2Naissance");
+
+        jTextFieldDate2naiss.setName("date2naiss"); // NOI18N
+
+        jLabel5.setForeground(java.awt.Color.white);
+        jLabel5.setText("Email");
+
+        jTextFieldLieu2naiss.setName("lieu2naiss"); // NOI18N
+
+        jLabel6.setForeground(java.awt.Color.white);
+        jLabel6.setText("Mobile");
+
+        jTextFieldEmail.setName("email"); // NOI18N
+
+        jTextFieldMobile.setName("mobile"); // NOI18N
+
+        jLabel8.setForeground(java.awt.Color.white);
+        jLabel8.setText("NCE");
+
+        enregistrer.setBackground(java.awt.SystemColor.activeCaption);
+        enregistrer.setForeground(java.awt.Color.white);
+        enregistrer.setText("Enregistrer");
+        enregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enregistrerActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Nom");
-
-        jLabel2.setText("Prenoms");
-
-        jLabel3.setText("Date2Naissance");
-
-        jLabel4.setText("Lieu2Naissance");
-
-        jLabel5.setText("Email");
-
-        jLabel6.setText("Mobile");
-
-        jLabel8.setText("NCE");
+        effacer.setBackground(java.awt.Color.red);
+        effacer.setForeground(java.awt.Color.white);
+        effacer.setText("Effacer");
+        effacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                effacerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,8 +149,8 @@ public class PanelStudent extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(20, 20, 20)
-                        .addComponent(jTextFieldLieu2naiss, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldLieu2naiss))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
@@ -97,30 +159,31 @@ public class PanelStudent extends javax.swing.JPanel {
                             .addComponent(jLabel3))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(jTextFieldNce))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldPrenoms, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextFieldDate2naiss)))
+                            .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldNom))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldPrenom))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldDate2naiss))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldNce, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextFieldNom)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel5))
-                        .addGap(80, 80, 80)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldEmail)
-                            .addComponent(jTextFieldMobile))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jTextFieldMobile))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(78, 78, 78)
+                                .addComponent(jTextFieldEmail))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(effacer)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                        .addComponent(enregistrer)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,25 +192,22 @@ public class PanelStudent extends javax.swing.JPanel {
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldNce, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldPrenom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldDate2naiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jTextFieldLieu2naiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldPrenoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldDate2naiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldLieu2naiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -156,41 +216,98 @@ public class PanelStudent extends javax.swing.JPanel {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(enregistrer)
+                    .addComponent(effacer)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        String table = "etudiants";
-        Database database = new Database();
-        Map map = new HashMap();
-        String nce = jTextFieldNce.getText();
-        String nom = jTextFieldNom.getText();
-        String prenoms = jTextFieldPrenom.getText();
-        String date2naissance = jTextFieldDate2naiss.getText();
-        String lieu2naissance =  jTextFieldLieu2naiss.getText();
-        String email = jTextFieldEmail.getText();
-        String mobile = jTextFieldMobile.getText();
+    private void effacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_effacerActionPerformed
+        jTextFieldNce.removeAll();
+        jTextFieldNom.removeAll();
+        jTextFieldPrenoms.removeAll();
+        jTextFieldDate2naiss.removeAll();
+        jTextFieldLieu2naiss.removeAll();
+        jTextFieldEmail.removeAll();
+        jTextFieldMobile.removeAll();
+        this.revalidate();
+    }//GEN-LAST:event_effacerActionPerformed
+
+    private void enregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enregistrerActionPerformed
+        map.put(jTextFieldNce.getName(), jTextFieldNce.getText());
+        map.put(jTextFieldNom.getName(), jTextFieldNom.getText());
+        map.put(jTextFieldPrenoms.getName(), jTextFieldPrenoms.getText());
+        map.put(jTextFieldDate2naiss.getName(), jTextFieldDate2naiss.getText());
+        map.put(jTextFieldLieu2naiss.getName(), jTextFieldLieu2naiss.getText());
+        map.put(jTextFieldEmail.getName(), jTextFieldEmail.getText());
+        map.put(jTextFieldMobile.getName(), jTextFieldMobile.getText());
         
-        try {
-            Student student = Recuperer.etudiant(database.getByString("etudiants", nce, "nce"));
-            if(student == null)
-                database.insert(table, student);
-            else{
-                database.delete(table, "nce", student.getNce());
-                student = new Student(nce, nom, prenoms, date2naissance, lieu2naissance, email, mobile);
-                database.insert(table, student);
-            }
-                JOptionPane.showMessageDialog(null, "Ce Étudiant existe dejà !");
-                
-        } catch (SQLException ex) {
-            Logger.getLogger(PanelStudent.class.getName()).log(Level.SEVERE, null, ex);
+        if(enregistrer.getText().equals("Rechercher")){
+            TreeSet<User> users = new TreeSet();
+            for(String s: map.keySet())
+                    if(!map.get(s).isEmpty()){
+                        try {
+                            users.addAll(Recuperer.etudiants(Main.database.getByChar(Student.class.getSimpleName(), s, map.get(s))));
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PanelStudent.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+            
+            Main.setIntojPanel(new Annuaire(users));
+            
         }
-    }//GEN-LAST:event_jButton1MouseClicked
+        else{
+            
+            
+            try {
+                Student student = (Student) Recuperer.etudiants(Main.database.getByChar(Student.class.getSimpleName(), jTextFieldNce.getName(), jTextFieldNce.getText())).first();
+                int reponse = JOptionPane.showOptionDialog(null, "Voullez-vous mettre à jour les informatiions de cet étudiant", 
+                        "Attention",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{"NON","OUI"},
+                        JOptionPane.YES_NO_OPTION
+                        );
+                if(reponse == JOptionPane.YES_OPTION){
+                    for(String s: map.keySet())
+                    if(!s.isEmpty())
+                        Main.database.update(table, s, map.get(s), user.getId());
+
+                
+                    new SuccesMsg("Mise à jour éffectuée !");
+                }
+                
+
+            } catch (SQLException ex) {
+                Logger.getLogger(PanelStudent.class.getName()).log(Level.SEVERE, null, ex);
+            }catch(NoSuchElementException e){
+                Student student = new Student(null, 
+                        jTextFieldNce.getText(), 
+                        jTextFieldNom.getText(), 
+                        jTextFieldPrenoms.getText(), 
+                        jTextFieldDate2naiss.getText(), 
+                        jTextFieldLieu2naiss.getText(), 
+                        jTextFieldEmail.getText(), 
+                        jTextFieldMobile.getText()
+                );
+                
+                user = student;
+                Main.database.insert(user.getClass().getSimpleName(), user);
+                Main.addToPaneG(null);
+                new SuccesMsg();
+            }
+            
+        }
+        
+
+    }//GEN-LAST:event_enregistrerActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton effacer;
+    private javax.swing.JButton enregistrer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -204,6 +321,10 @@ public class PanelStudent extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldMobile;
     private javax.swing.JTextField jTextFieldNce;
     private javax.swing.JTextField jTextFieldNom;
-    private javax.swing.JTextField jTextFieldPrenom;
+    private javax.swing.JTextField jTextFieldPrenoms;
     // End of variables declaration//GEN-END:variables
+     
+
+    
 }
+

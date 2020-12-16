@@ -15,12 +15,12 @@ import java.sql.ResultSet;
  *
  * @author mosco
  */
-public class Database {
+public class Database{
     
-    Connection connection;
-    private Statement statement;
-    private ResultSet resultSet;
-    private String query;
+    static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+    private static String query;
     
     public Database() {
         initConnection(DB_Info.DB_LINK.toString(), DB_Info.DB_USER.toString(), DB_Info.DB_PASSWORD.toString());
@@ -43,7 +43,9 @@ public class Database {
     
     public boolean insert(String table, Object object){
         try{
-            query = "INSERT INTO "+table+" VALUES(null,"+object.toString()+")";
+            // vinitConnection(DB_Info.DB_LINK.toString(), DB_Info.DB_USER.toString(), DB_Info.DB_PASSWORD.toString());
+            query = String.format("INSERT INTO %s VALUES(%s)", table, object.toString());
+            System.err.println(query);
             statement.executeUpdate(query);
             return true;
         }catch(SQLException e){
@@ -65,38 +67,46 @@ public class Database {
         }
     }
     
-    public ResultSet getByChar(String table, String searchChar, String attr){
+    public ResultSet getByFirstChar(String table, String searchChar, String attr){
         try{
-            query = "SELECT * FROM "+table+" WHERE "+attr+" LIKE '"+searchChar+"%'";
-            System.out.println(query);
+            query = "SELECT * FROM "+table+" WHERE "+attr+" LIKE '%"+searchChar+"%'";
             resultSet = statement.executeQuery(query);
             return resultSet;
         }catch(SQLException e){
-            System.out.println("a is pressed !");
             System.out.println(e.getMessage());
             return null;
         }
     }
     
-    public ResultSet getByString(String table, String searchStr, String attr){
+    
+    public ResultSet getByChar(String table, String attr, String searchChar){
         try{
-            query = "SELECT * FROM "+table+" WHERE "+attr+"="+searchStr;
-            System.out.println(query);
+            query = "SELECT * FROM "+table+" WHERE "+attr+" LIKE '"+searchChar+"%'";
             resultSet = statement.executeQuery(query);
-            while(resultSet.next()){
-                System.out.println(resultSet.getString("first_name")+ " "+resultSet.getString("last_names"));
-            }
-
-            return statement.executeQuery(table);
+            return resultSet;
         }catch(SQLException e){
             System.out.println(e.getMessage());
             return null;
         }
     }
     
-    public boolean update(String table, String attribute_one, String value_one, String attribute_two, String value_two){
+    public ResultSet getByString(String table, String attr, String searchStr){
         try{
-            query = "UPDATE "+table+"SET "+attribute_one+"="+value_one+" WHERE "+attribute_two+"="+value_two;
+            query = String.format("SELECT * FROM %s WHERE %s='%s'", table, attr, searchStr);
+            System.out.println(query);
+            resultSet = statement.executeQuery(query);
+            
+            return resultSet;
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean update(String table, String attribute_one, String value_one, String id){
+        try{
+            query = String.format("UPDATE %s SET %s=%s WHERE id='%s'", table, attribute_one, value_one, id);
             statement.executeUpdate(query);
             return true;
         }catch(SQLException e){
@@ -105,9 +115,9 @@ public class Database {
         }
     }
     
-    public boolean delete(String table, String attr, String value){
+    public boolean delete(String table, String id){
         try{
-            query = "DELETE FROM"+table+"WHERE"+attr+"="+value;
+            query = "DELETE FROM"+table+"WHERE id='"+id+"'";
             statement.executeUpdate(query);
             return true;
         }catch(SQLException e){

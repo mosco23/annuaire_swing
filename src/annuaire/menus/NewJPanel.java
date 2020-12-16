@@ -5,49 +5,17 @@
  */
 package annuaire.menus;
 
-import annuaire.Main;
-import annuaire.panels.PanelAdmin;
-import annuaire.panels.PanelConnexion;
-import javax.swing.JMenuItem;
-
 /**
  *
  * @author mosco
  */
-public class TypeOne extends javax.swing.JMenu {
+public class NewJPanel extends javax.swing.JPanel {
 
-    JMenuItem itemOne;
-    JMenuItem itemTwo;
     /**
-     * Creates new form TypeOne
+     * Creates new form NewJPanel
      */
-    public TypeOne() {
+    public NewJPanel() {
         initComponents();
-        
-        setText("Menu");
-        initJMenuItems();
-        
-        
-    }
-    
-    //private void 
-    
-    private void initJMenuItems(){
-        itemOne = new JMenuItem("Créer un compte");
-        itemTwo = new JMenuItem("Se Connecter");
-        add(itemOne);
-        add(itemTwo);
-        
-        itemOne.addActionListener(this::itemOneActionPerformed);
-        itemTwo.addActionListener(this::itemTwoActionPerformed);
-    }
-    
-    private void itemOneActionPerformed(java.awt.event.ActionEvent evt){
-        Main.addToPaneG(new PanelAdmin());
-    }
-    
-    private void itemTwoActionPerformed(java.awt.event.ActionEvent evt){
-        Main.addToPaneG(new PanelConnexion());
     }
 
     /**

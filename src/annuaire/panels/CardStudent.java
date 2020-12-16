@@ -6,6 +6,7 @@
 package annuaire.panels;
 
 import annuaire.personnes.Student;
+import javax.swing.JPopupMenu;
 
 /**
  *
@@ -13,12 +14,14 @@ import annuaire.personnes.Student;
  */
 public class CardStudent extends javax.swing.JPanel {
 
+    private Student student;
     /**
      * Creates new form Card
      * @param student
      */
     public CardStudent(Student student) {
         initComponents();
+        this.student = student;
         nce.setText(student.getNce());
         nom.setText(student.getNom());
         prenoms.setText(student.getPrenoms());
@@ -35,25 +38,27 @@ public class CardStudent extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        plusInfo = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         nom = new javax.swing.JLabel();
         email = new javax.swing.JLabel();
         prenoms = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         nce = new javax.swing.JLabel();
         canvas = new java.awt.Canvas();
+        plusInfo = new javax.swing.JButton();
 
         setBackground(java.awt.Color.darkGray);
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setForeground(java.awt.SystemColor.desktop);
-        setMaximumSize(new java.awt.Dimension(200, 440));
-        setMinimumSize(new java.awt.Dimension(200, 440));
-        setPreferredSize(new java.awt.Dimension(200, 440));
+        setMaximumSize(new java.awt.Dimension(200, 418));
+        setMinimumSize(new java.awt.Dimension(200, 418));
+        setPreferredSize(new java.awt.Dimension(200, 418));
 
-        plusInfo.setFont(new java.awt.Font("Ubuntu", 1, 17)); // NOI18N
-        plusInfo.setForeground(java.awt.Color.white);
-        plusInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        plusInfo.setText("Plus d'information");
+        jPanel1.setBackground(java.awt.Color.darkGray);
+        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setForeground(java.awt.SystemColor.desktop);
+        jPanel1.setMaximumSize(new java.awt.Dimension(200, 418));
+        jPanel1.setMinimumSize(new java.awt.Dimension(200, 418));
 
         nom.setFont(new java.awt.Font("Ubuntu", 1, 25)); // NOI18N
         nom.setForeground(java.awt.Color.white);
@@ -81,29 +86,35 @@ public class CardStudent extends javax.swing.JPanel {
 
         canvas.setBackground(java.awt.Color.white);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        plusInfo.setBackground(java.awt.SystemColor.desktop);
+        plusInfo.setFont(new java.awt.Font("Ubuntu", 1, 17)); // NOI18N
+        plusInfo.setForeground(java.awt.Color.white);
+        plusInfo.setText("Plus d'information");
+        plusInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plusInfoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nce, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(nom, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nce, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
             .addComponent(prenoms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(nom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(plusInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                     .addComponent(nce, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -114,19 +125,50 @@ public class CardStudent extends javax.swing.JPanel {
                 .addComponent(prenoms, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(plusInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(plusInfo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 194, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 423, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void plusInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusInfoActionPerformed
+        JPopupMenu jpm = new JPopupMenu();
+        jpm.setLightWeightPopupEnabled(true);
+        jpm.add(new CompletCardStudent(student));
+        jpm.setLocation(100, 100);
+        jpm.setVisible(true);
+    }//GEN-LAST:event_plusInfoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Canvas canvas;
     private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel nce;
     private javax.swing.JLabel nom;
-    private javax.swing.JLabel plusInfo;
+    private javax.swing.JButton plusInfo;
     private javax.swing.JLabel prenoms;
     // End of variables declaration//GEN-END:variables
 }

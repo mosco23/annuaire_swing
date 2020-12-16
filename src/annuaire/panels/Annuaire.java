@@ -5,14 +5,17 @@
  */
 package annuaire.panels;
 
-import annuaire.DB.Database;
-import annuaire.personnes.Student;
+import annuaire.Main;
 import annuaire.Utils.Recuperer;
+import annuaire.menus.TypeOne;
+import annuaire.menus.TypeTwo;
 import annuaire.personnes.Admin;
+import annuaire.personnes.Student;
 import annuaire.personnes.User;
 import java.awt.GridLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,22 +24,38 @@ import java.util.logging.Logger;
  *
  * @author mosco
  */
-public class Annuaire extends javax.swing.JPanel {
-
-    GridLayout gridLayout = new GridLayout(0, 4, 5, 8);
-    Database database = new Database();
+public class Annuaire extends javax.swing.JPanel implements Runnable{
+    
+    private final GridLayout gridLayout = new GridLayout(0, 4, 5, 10);
     private TreeSet treeSet = new TreeSet();
     private final String table;
     /**
-     * Creates new form Annuaire2
+     * Creates new form Annuaire
      * @param users
      */
-    public Annuaire(TreeSet<User> users) {
+    public Annuaire(TreeSet<User> users) throws NoSuchElementException{
         initComponents();
         table = users.first().getClass().getSimpleName();
         jPanel.setLayout(gridLayout);
+        
         makCard(users);
         setVisible(true);
+        revalidate();
+    }
+    
+    
+    @Override
+    public void run() {
+        if(Main.admin == null){
+            Main.setjMenuBar(new TypeOne());            
+        }
+        else{
+            Main.setjMenuBar(new TypeTwo());
+        }
+
+        jPanel.revalidate();
+        revalidate();
+        System.err.println("je suis en cours ...");    
     }
     
     
@@ -44,13 +63,11 @@ public class Annuaire extends javax.swing.JPanel {
     private void makCard(TreeSet<User> users){
         jPanel.removeAll();
         for(User user: users){
-            if(user instanceof Student)
-                jPanel.add(new CardStudent((Student) user));
-            else
-                jPanel.add(new CardAdmin((Admin) user));
+            jPanel.add(new Card(user));
         }
         
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -88,14 +105,14 @@ public class Annuaire extends javax.swing.JPanel {
         btn_u = new javax.swing.JButton();
         btn_v = new javax.swing.JButton();
         btn_w = new javax.swing.JButton();
-        btn_a = new javax.swing.JButton();
         btn_x = new javax.swing.JButton();
         btn_b = new javax.swing.JButton();
         btn_y = new javax.swing.JButton();
         btn_c = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        actualiser = new javax.swing.JButton();
         rechercheCible = new javax.swing.JButton();
         btn_d = new javax.swing.JButton();
+        btn_a = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(761, 565));
 
@@ -103,11 +120,11 @@ public class Annuaire extends javax.swing.JPanel {
         jPanel.setLayout(jPanelLayout);
         jPanelLayout.setHorizontalGroup(
             jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 759, Short.MAX_VALUE)
+            .addGap(0, 762, Short.MAX_VALUE)
         );
         jPanelLayout.setVerticalGroup(
             jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 444, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(jPanel);
@@ -122,6 +139,11 @@ public class Annuaire extends javax.swing.JPanel {
         btn_recherche.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_rechercheMouseClicked(evt);
+            }
+        });
+        btn_recherche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_rechercheActionPerformed(evt);
             }
         });
 
@@ -265,23 +287,6 @@ public class Annuaire extends javax.swing.JPanel {
             }
         });
 
-        btn_a.setText("A");
-        btn_a.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_aMouseClicked(evt);
-            }
-        });
-        btn_a.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_aActionPerformed(evt);
-            }
-        });
-        btn_a.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btn_aKeyPressed(evt);
-            }
-        });
-
         btn_x.setText("X");
         btn_x.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -310,10 +315,10 @@ public class Annuaire extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setText("Actualiser");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        actualiser.setText("Actualiser");
+        actualiser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                actualiserMouseClicked(evt);
             }
         });
 
@@ -332,13 +337,21 @@ public class Annuaire extends javax.swing.JPanel {
             }
         });
 
+        btn_a.setText("A");
+        btn_a.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_aMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
                         .addComponent(btn_a)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_b)
@@ -346,7 +359,7 @@ public class Annuaire extends javax.swing.JPanel {
                         .addComponent(btn_c)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_d)
-                        .addGap(7, 7, 7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_e)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_f)
@@ -355,27 +368,27 @@ public class Annuaire extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_h)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_i))
-                    .addComponent(str_recherche))
+                        .addComponent(btn_i)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_j))
+                    .addComponent(str_recherche, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btn_j)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_k)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_l)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_m)
-                        .addGap(4, 4, 4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_n)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_o)
-                        .addGap(5, 5, 5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_p)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_q)
-                        .addGap(5, 5, 5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_r)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_s)
@@ -387,26 +400,26 @@ public class Annuaire extends javax.swing.JPanel {
                         .addComponent(btn_v)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_w)
-                        .addGap(4, 4, 4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_x)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_y)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_z)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btn_recherche)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(rechercheCible, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btn_recherche)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(actualiser)))
                         .addGap(159, 159, 159))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(rechercheCible, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(99, 99, 99)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel2)
+                .addGap(99, 99, 99)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -416,16 +429,15 @@ public class Annuaire extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rechercheCible)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(str_recherche, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_recherche)
-                    .addComponent(jButton1))
+                    .addComponent(actualiser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_a)
                     .addComponent(btn_b)
                     .addComponent(btn_c)
                     .addComponent(btn_e)
@@ -450,188 +462,230 @@ public class Annuaire extends javax.swing.JPanel {
                     .addComponent(btn_y)
                     .addComponent(btn_z)
                     .addComponent(btn_m)
-                    .addComponent(btn_d)))
+                    .addComponent(btn_d)
+                    .addComponent(btn_a)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                .addComponent(jScrollPane2))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_rechercheMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_rechercheMouseClicked
        //Recuperer.recherche(database, table, list,str_recherche.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_rechercheMouseClicked
 
     private void btn_zMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_zMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_z.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_z.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_zMouseClicked
 
     private void btn_mMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_mMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_m.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_m.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_mMouseClicked
 
     private void btn_eMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_eMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_e.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_e.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_eMouseClicked
 
     private void btn_fMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_fMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_f.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_f.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_fMouseClicked
 
     private void btn_gMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_gMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_g.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_g.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_gMouseClicked
 
     private void btn_hMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_hMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_h.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_h.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_hMouseClicked
 
     private void btn_iMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_iMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_i.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_i.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_iMouseClicked
 
     private void btn_jMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_jMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_j.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_j.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_jMouseClicked
 
     private void btn_kMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_kMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_k.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_k.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_kMouseClicked
 
     private void btn_lMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_lMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_l.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_l.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_lMouseClicked
 
     private void btn_nMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_nMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_n.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_n.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_nMouseClicked
 
     private void btn_oMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_oMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_o.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_o.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_oMouseClicked
 
     private void btn_pMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_pMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_p.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_p.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_pMouseClicked
 
     private void btn_qMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_qMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_q.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_q.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_qMouseClicked
 
     private void btn_rMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_rMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_r.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_r.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_rMouseClicked
 
     private void btn_sMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_sMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_s.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_s.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_sMouseClicked
 
     private void btn_tMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_tMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_t.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_t.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_tMouseClicked
 
     private void btn_uMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_uMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_u.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_u.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_uMouseClicked
 
     private void btn_vMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_vMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_v.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_v.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_vMouseClicked
 
     private void btn_wMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_wMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_w.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_w.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_wMouseClicked
 
-    private void btn_aMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_aMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_a.getText());
-        makCard(treeSet);
-    }//GEN-LAST:event_btn_aMouseClicked
-
-    private void btn_aActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_aActionPerformed
-
-    private void btn_aKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_aKeyPressed
-
-    }//GEN-LAST:event_btn_aKeyPressed
-
     private void btn_xMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_xMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_x.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_x.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_xMouseClicked
 
     private void btn_bMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_bMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_b.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_b.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_bMouseClicked
 
     private void btn_yMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_yMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_y.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_y.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_yMouseClicked
 
     private void btn_cMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_c.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_c.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_cMouseClicked
 
     private void rechercheCibleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rechercheCibleMouseClicked
+        if(table.equals(Admin.class.getSimpleName()))
+            Main.addToPaneG(new PanelAdmin("Rechercher"));
+        else
+            Main.addToPaneG(new PanelStudent("Rechercher"));
         
     }//GEN-LAST:event_rechercheCibleMouseClicked
 
     private void btn_dMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dMouseClicked
-        treeSet = Recuperer.rechercheSimple(database, table, null, btn_d.getText());
+        treeSet = Recuperer.rechercheSimple(table, btn_d.getText());
         makCard(treeSet);
+        this.revalidate();
     }//GEN-LAST:event_btn_dMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void actualiserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_actualiserMouseClicked
         treeSet.clear();
-        ResultSet resultSet = database.getAll(table);
+        ResultSet resultSet = Main.database.getAll(table);
         try {
-            while (resultSet.next()) {    
-                treeSet.add(Recuperer.etudiant(resultSet));
-            }
+            if(table.equals(Student.class.getSimpleName()))
+                treeSet = Recuperer.etudiants(resultSet);
+            else
+                treeSet = Recuperer.admins(resultSet);
+            
         } catch (SQLException ex) {
             Logger.getLogger(Annuaire.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         makCard(treeSet);
-    }//GEN-LAST:event_jButton1MouseClicked
+        this.revalidate();
+    }//GEN-LAST:event_actualiserMouseClicked
+
+    private void btn_aMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_aMouseClicked
+        treeSet = Recuperer.rechercheSimple(table, btn_a.getText());
+        makCard(treeSet);
+        this.revalidate();
+    }//GEN-LAST:event_btn_aMouseClicked
+
+    private void btn_rechercheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_rechercheActionPerformed
+        
+        try {
+            treeSet = Recuperer.etudiants(Main.database.getByFirstChar(table, str_recherche.getText(), "nom"));
+            treeSet.addAll(Recuperer.etudiants(Main.database.getByFirstChar(table, str_recherche.getText(), "nce")));
+            makCard(treeSet);
+            this.revalidate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Annuaire.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_rechercheActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actualiser;
     private javax.swing.JButton btn_a;
     private javax.swing.JButton btn_b;
     private javax.swing.JButton btn_c;
@@ -659,7 +713,6 @@ public class Annuaire extends javax.swing.JPanel {
     private javax.swing.JButton btn_x;
     private javax.swing.JButton btn_y;
     private javax.swing.JButton btn_z;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel;
@@ -668,4 +721,6 @@ public class Annuaire extends javax.swing.JPanel {
     private javax.swing.JButton rechercheCible;
     private javax.swing.JTextField str_recherche;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -5,7 +5,11 @@
  */
 package annuaire.menus;
 
+import annuaire.Main;
+import annuaire.Utils.MonControleur;
+import annuaire.panels.Card;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -13,20 +17,48 @@ import javax.swing.JMenuItem;
  */
 public class TypeTwo extends javax.swing.JMenu {
 
+    JMenuItem itemOne;
+    JMenuItem itemTwo;
+    
     /**
      * Creates new form TypeOne
-     * @param text
      */
     public TypeTwo() {
         initComponents();
         
         setText("Menu");
-        JMenuItem itemOne = new JMenuItem("Mon Profil");
-        JMenuItem itemTwo = new JMenuItem("Se Déconnecter");
+        initJMenuItems();
+        
+        
+        
+    }
+    
+    //private void 
+    
+    private void initJMenuItems(){
+        itemOne = new JMenuItem("Mon Profil");
+        itemTwo = new JMenuItem("Se Déconnecter");
+        
+        add(new MenuStudent());
+        add(new MenuAdmin());
         add(itemOne);
         add(itemTwo);
         
-        
+        itemOne.addActionListener(this::itemOneActionPerformed);
+        itemTwo.addActionListener(this::itemTwoActionPerformed);
+    }
+    
+    
+    
+    private void itemOneActionPerformed(java.awt.event.ActionEvent evt){
+        Main.addToPaneG(new Card(Main.admin));
+    }
+    
+    private void itemTwoActionPerformed(java.awt.event.ActionEvent evt){
+        Main.addToPaneG(null);
+        Main.admin = null;
+        Main.setIntojPanel();
+        SwingUtilities.invokeLater(new MonControleur());
     }
 
     /**
